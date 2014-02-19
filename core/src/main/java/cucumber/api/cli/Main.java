@@ -19,6 +19,13 @@ public class Main {
     }
 
     public static void run(String[] argv, ClassLoader classLoader) throws IOException {
+        //wangtong add cucumber options when start
+        String optionName = "cucumber_options";
+        if (System.getenv(optionName) != null) {
+            System.setProperty("cucumber.options", System.getenv(optionName));
+        }
+        //end
+
         RuntimeOptions runtimeOptions = new RuntimeOptions(new ArrayList<String>(asList(argv)));
 
         ResourceLoader resourceLoader = new MultiLoader(classLoader);

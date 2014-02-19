@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class CucumberFeature {
     private final String path;
@@ -112,8 +113,24 @@ public class CucumberFeature {
         formatter.feature(getGherkinFeature());
 
         for (CucumberTagStatement cucumberTagStatement : getFeatureElements()) {
+            //wangtong add start
+            String scenarioName = cucumberTagStatement.getVisualName();
+            long start = System.nanoTime();
+            System.out.println("\r\n[" + scenarioName + "] start!");
+            //wangtong add end
             //Run the scenario, it should handle before and after hooks
             cucumberTagStatement.run(formatter, reporter, runtime);
+            //wangtong add start
+            long _cost = System.nanoTime() - start;
+            System.out.println("\r\n[" + scenarioName + "] end in " +
+                    String.format("%d min %d sec %d ms",
+                            TimeUnit.NANOSECONDS.toMinutes(_cost),
+                            TimeUnit.NANOSECONDS.toSeconds(_cost) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.NANOSECONDS.toMinutes(_cost)),
+                            TimeUnit.NANOSECONDS.toMillis(_cost) - TimeUnit.SECONDS.toMillis(TimeUnit.NANOSECONDS.toSeconds(_cost))
+                    )
+            );
+            //wangtong add end
         }
         formatter.eof();
 

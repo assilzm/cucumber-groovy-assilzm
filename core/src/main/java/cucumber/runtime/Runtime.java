@@ -258,6 +258,11 @@ public class Runtime implements UnreportedStepExecutor {
     }
 
     public void runStep(String featurePath, Step step, Reporter reporter, I18n i18n) {
+        //wangtong add start.
+        TimerUtils timer = new TimerUtils();
+        timer.start(step);
+        //seeyon add end.
+
         StepDefinitionMatch match;
 
         try {
@@ -269,6 +274,9 @@ public class Runtime implements UnreportedStepExecutor {
             addStepToCounterAndResult(result);
             addError(e);
             skipNextStep = true;
+            //wangtong add start.
+            timer.end(new Result(Result.FAILED, 0L, e, DUMMY_ARG));
+            //wangtong add end.
             return;
         }
 
@@ -279,6 +287,9 @@ public class Runtime implements UnreportedStepExecutor {
             reporter.result(Result.UNDEFINED);
             addStepToCounterAndResult(Result.UNDEFINED);
             skipNextStep = true;
+            //wangtong add start.
+            timer.end(Result.UNDEFINED);
+            //wangtong add end.
             return;
         }
 
@@ -289,6 +300,9 @@ public class Runtime implements UnreportedStepExecutor {
         if (skipNextStep) {
             addStepToCounterAndResult(Result.SKIPPED);
             reporter.result(Result.SKIPPED);
+            //wangtong add start.
+            timer.end(Result.SKIPPED);
+            //wangtong add end.
         } else {
             String status = Result.PASSED;
             Throwable error = null;
@@ -305,6 +319,9 @@ public class Runtime implements UnreportedStepExecutor {
                 Result result = new Result(status, duration, error, DUMMY_ARG);
                 addStepToCounterAndResult(result);
                 reporter.result(result);
+                //wangtong add start.
+                timer.end(result);
+                //wangtong add end.
             }
         }
     }
